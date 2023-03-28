@@ -1,0 +1,23 @@
+name: Render and update PR
+on:
+  workflow_run:
+    workflows: [Build]
+    types: [completed]
+
+  pull_request:
+    branches: [none_existing_branch]
+  push:
+    branches: [none_existing_branch]
+
+jobs:
+  render-kpt:
+    name: Render KPT
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+      actions: "read"
+    steps:
+      - name: Echo
+        run: |
+          echo "echo world"

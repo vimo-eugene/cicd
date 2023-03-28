@@ -1,0 +1,27 @@
+name: Promote
+on:
+  pull_request:
+    types: [review_requested, closed]
+
+env:
+  ENV_FROM: "${{ (github.event.action == 'closed' && github.event.pull_request.merged) && 'staging' || 'development' }}"
+  ENV_TO: "${{ (github.event.action == 'closed' && github.event.pull_request.merged) && 'production' || 'staging' }}"
+  KPT_ADD_ROUTING_IMAGE: europe-west4-docker.pkg.dev/shypple-dev/docker/kpt-functions/add-routing:0.1.1
+
+jobs:
+  promote:
+    name: Promote to higher environment
+    concurrency:
+      group: promote-${{ github.head_ref }}
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    env:
+      KPT_VERSION: v1.0.0-beta.20
+    if: "${{ contains(github.event.pull_request.labels.*.name, 'autorelease: pending') }}"
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - name: Echo
+        run: |
+          echo "echo world"
