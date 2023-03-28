@@ -1,54 +1,56 @@
-name: Hotfix PR
+name: Hotfix Workflow
 
 on:
   push:
     branches:
-      - 'hotfix/**'
+      - hotfix/*
 
 jobs:
-  create-pr:
+  verify_hotfix_branch:
+    name: Verify Hotfix Branch
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the shypple-next repo
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Validate Branch
-        run: |
-          current_branch=$(git rev-parse --abbrev-ref HEAD)
-          base_tag=$(git describe --tags --abbrev=0 --match "v*" $current_branch^ 2>/dev/null)
-          echo "Current branch: $base_tag"
-          if [ -z "$base_tag" ]
-          then
-            echo "Error: Hotfix branch not created from a tagged branch"
-            exit 1
-          fi
-      - name: Create Hotfix Branch from Tag
-        run: |
-          git fetch --all --tags
-          current_branch=$(git rev-parse --abbrev-ref HEAD)
-          base_tag=$(git describe --tags --abbrev=0 --match "v*" $current_branch^ 2>/dev/null)
-          hotfix_base_branch="hotfix-base/$base_tag"
-          echo "Hotfix base branch: $hotfix_base_branch"
 
-          git checkout tags/$base_tag -b $hotfix_base_branch
-          git push origin $hotfix_base_branch
-      
-      # - name: Create Pull Request
-      #   run:
-      #     echo "Create PR"
-      #     gh pr create --title "Hotfix" --body "Hotfix" --base hotfix-base/v2.17.1 --head hotfix/2.17.1
-      #   uses: peter-evans/create-pull-request@v4
-      #   with:
-      #     token: ${{ secrets.PAT_TOKEN }}
-      #     title: 'Hotfix'
-      #     commit-message: 'Merge hotfix'
-      #     # branch: create-pull-request/patch
-      #     # base: hotfix-base/v2.17.1
-      #     labels: 'hotfix'
-      # # - name: Output Hotfix Branch
-      # #   id: create-hotfix-branch
-      # #   run: |
-      # #     current_branch=$(git rev-parse --abbrev-ref HEAD)
-      # #     base_tag=$(git describe --tags --abbrev=0 --match "v*" $current_branch^)
-      # #     echo ::set-output name=hotfix-branch::hotfix/$base_tag
+    steps:
+    - name: Check if branch was created from tag
+      id: verify_tag
+      run: |
+        tag_name=$(echo "${{ github.ref }}" | sed -n 's/refs\/tags\///p')
+        commit=$(git rev-parse HEAD)
+
+        if ! git show-ref --tags | grep -q "refs/tags/${tag_name}\$"; then
+          echo "ERROR: No tag found for this hotfix branch"
+          exit 1
+        fi
+
+        tag_commit=$(git show-ref --verify --hash refs/tags/${tag_name})
+        if ! git merge-base --is-ancestor "${tag_commit}" "${commit}"; then
+          echo "ERROR: Hotfix branch was not created from the latest tag"
+          exit 1
+        fi
+
+    - name: Create Hotfix Base branch from tag
+      id: create_base_branch
+      uses: actions/checkout@v2
+      with:
+        ref: "refs/tags/${{ steps.verify_tag.outputs.tag_name }}"
+        run: |
+          git checkout -b hotfix-base/${{ steps.verify_tag.outputs.tag_name }}
+
+      # Push the created hotfix-base branch
+    # - name: Push Hotfix Base Branch
+    #   uses: ./.github/actions/push_branch
+    #   with:
+    #     branch: hotfix-base/${{ steps.verify_tag.outputs.tag_name }}
+    #     remote: origin
+
+    # - name: Create Pull Request
+    #   uses: peter-evans/create-pull-request@v3
+    #   with:
+    #     title: "Merge Hotfix Branch into Base Branch"
+    #     body: "Merging hotfix branch: $GITHUB_REF into hotfix-base/${{ steps.verify_tag.outputs.tag_name }}"
+    #     branch: hotfix-base/${{ steps.verify_tag.outputs.tag_name }}
+    #     base: ${{ steps.verify_tag.outputs.tag_name}}
+    #     label: "hotfix"
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
