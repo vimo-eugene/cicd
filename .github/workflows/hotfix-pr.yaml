@@ -1,18 +1,51 @@
-name: Hotfix Workflow
+name: Create Hotfix PR
 
 on:
   push:
     branches:
-      - hotfix/*
+      - "hotfix/*"
 
 jobs:
-  verify_hotfix_branch:
-    name: Verify Hotfix Branch
+  create_hotfix_pr:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Hotfix Branch
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-      - name: Print current branch
-        run: echo "Current branch is ${{ github.ref }}"
+      - name: Set up Git user
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions Bot"
+
+      # - name: Install gh CLI
+      #   run: |
+      #     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+      #     echo "deb [signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+      #     sudo apt update
+      #     sudo apt install gh
+
+      - name: Create hotfix base branch and PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          CURRENT_BRANCH=$(git branch --show-current)
+          HOTFIX_BASE_BRANCH="hotfix-base-${CURRENT_BRANCH#hotfix/}"
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+
+          # Check if hotfix base branch exists, create if not
+          if ! git show-ref --verify --quiet refs/heads/${HOTFIX_BASE_BRANCH}; then
+            git checkout -b ${HOTFIX_BASE_BRANCH} ${LATEST_TAG}
+            git push origin ${HOTFIX_BASE_BRANCH}
+          fi
+
+          # Switch back to the hotfix branch
+          git checkout ${CURRENT_BRANCH}
+
+          # Check if a PR already exists, create if not
+          PR_EXISTS=$(gh pr list --base ${HOTFIX_BASE_BRANCH} --head ${CURRENT_BRANCH} --json state -q 'length(.[] | select(.state == "OPEN" or .state == "DRAFT"))' || echo "0")
+          if [ "${PR_EXISTS}" == "0" ]; then
+            gh pr create --base ${HOTFIX_BASE_BRANCH} --head ${CURRENT_BRANCH} --title "Hotfix PR: ${CURRENT_BRANCH}" --body "This is a hotfix PR. Please review and merge the changes."
+          fi

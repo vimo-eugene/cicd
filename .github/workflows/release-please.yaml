@@ -13,14 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: google-github-actions/release-please-action@v3
-        id: release
         with:
           release-type: node
           package-name: release-please-action
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Trigger Tag Push Event
-        if: ${{ steps.release.outputs.released }}
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          event-type: tag-push

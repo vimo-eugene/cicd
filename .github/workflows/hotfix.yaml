@@ -1,20 +1,24 @@
 name: Hotfix
 on:
-  pull_request_review:
-    types: [submitted]
+  # pull_request_review:
+  #   types: [submitted]
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - hotfix-base/*
 
 jobs:
   build-and-deploy:
-    if: github.event.review.state == 'approved' && startsWith(github.event.pull_request.head.ref, 'hotfix/')
+    if: startsWith(github.event.pull_request.head.ref, 'hotfix/')
     name: Build and Deploy
     runs-on: ubuntu-latest
     env:
       KPT_VERSION: v1.0.0-beta.18
       IMAGE_PREFIX: europe-west4-docker.pkg.dev/shypple-dev/docker
     permissions:
-      contents: 'read'
-      id-token: 'write'
-      actions: 'write'
+      contents: "read"
+      id-token: "write"
+      actions: "write"
     steps:
       - name: Echo world
         run: echo "Hello world"
