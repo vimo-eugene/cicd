@@ -11,46 +11,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if branch was created from tag
-      id: verify_tag
-      run: |
-        tag_name=$(echo "${{ github.ref }}" | sed -n 's/refs\/tags\///p')
-        commit=$(git rev-parse HEAD)
-
-        if ! git show-ref --tags | grep -q "refs/tags/${tag_name}\$"; then
-          echo "ERROR: No tag found for this hotfix branch"
-          exit 1
-        fi
-
-        tag_commit=$(git show-ref --verify --hash refs/tags/${tag_name})
-        if ! git merge-base --is-ancestor "${tag_commit}" "${commit}"; then
-          echo "ERROR: Hotfix branch was not created from the latest tag"
-          exit 1
-        fi
-
-    - name: Create Hotfix Base branch from tag
-      id: create_base_branch
-      uses: actions/checkout@v2
-      with:
-        ref: "refs/tags/${{ steps.verify_tag.outputs.tag_name }}"
+      - name: Check if branch was created from tag
+        id: verify_tag
         run: |
-          git checkout -b hotfix-base/${{ steps.verify_tag.outputs.tag_name }}
+          tag_name=$(echo "${{ github.ref }}" | sed -n 's/refs\/tags\///p')
+          commit=$(git rev-parse HEAD)
 
-      # Push the created hotfix-base branch
-    # - name: Push Hotfix Base Branch
-    #   uses: ./.github/actions/push_branch
-    #   with:
-    #     branch: hotfix-base/${{ steps.verify_tag.outputs.tag_name }}
-    #     remote: origin
+          if ! git show-ref --tags | grep -q "refs/tags/${tag_name}\$"; then
+            echo "ERROR: No tag found for this hotfix branch"
+            exit 1
+          fi
 
-    # - name: Create Pull Request
-    #   uses: peter-evans/create-pull-request@v3
-    #   with:
-    #     title: "Merge Hotfix Branch into Base Branch"
-    #     body: "Merging hotfix branch: $GITHUB_REF into hotfix-base/${{ steps.verify_tag.outputs.tag_name }}"
-    #     branch: hotfix-base/${{ steps.verify_tag.outputs.tag_name }}
-    #     base: ${{ steps.verify_tag.outputs.tag_name}}
-    #     label: "hotfix"
+          tag_commit=$(git show-ref --verify --hash refs/tags/${tag_name})
+          if ! git merge-base --is-ancestor "${tag_commit}" "${commit}"; then
+            echo "ERROR: Hotfix branch was not created from the latest tag"
+            exit 1
+          fi
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Hotfix Base branch from tag
+        id: create_base_branch
+        uses: actions/checkout@v2
+        with:
+          ref: "refs/tags/${{ steps.verify_tag.outputs.tag_name }}"
+          run: |
+            git checkout -b hotfix-base/${{ steps.verify_tag.outputs.tag_name }}
