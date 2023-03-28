@@ -1,0 +1,15 @@
+name: On Tag Push
+
+on:
+  repository_dispatch:
+    types: [tag-push]
+
+jobs:
+  # Add the jobs you want to run when the tag push event is triggered
+  your-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Add the steps for your job
+      - name: Do something
+        run: echo "Tag push event triggered"
