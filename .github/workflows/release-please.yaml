@@ -8,6 +8,10 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
+      - name: print github_token
+        run: echo $GITHUB_TOKEN
+      - name: print github event
+        run: echo $GITHUB_EVENT
       - uses: google-github-actions/release-please-action@v3
         with:
           release-type: node
