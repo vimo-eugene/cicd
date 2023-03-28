@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/eugeneVzaidun/cicd/compare/v1.0.0...v1.1.0) (2023-03-28)
+
+
+### Features
+
+* add hotfix ci flow ([de6669f](https://github.com/eugeneVzaidun/cicd/commit/de6669fca299a823b4cbdfc31941eafdbea41044))
+* add hotfix ci flow ([a2c6a9c](https://github.com/eugeneVzaidun/cicd/commit/a2c6a9cbc1819878d5196892b13064c87e9ba341))
+
 ## 1.0.0 (2023-03-28)
 
 
