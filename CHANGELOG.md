@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/eugeneVzaidun/cicd/compare/v1.3.0...v1.4.0) (2023-03-28)
+
+
+### Features
+
+* add date ([d5a88f6](https://github.com/eugeneVzaidun/cicd/commit/d5a88f6e673ad5714b01b050650f41d3f18f7262))
+* add date ([bfaa078](https://github.com/eugeneVzaidun/cicd/commit/bfaa078710cd02b7d3a276d1fd34862b9d774c03))
+
 ## [1.3.0](https://github.com/eugeneVzaidun/cicd/compare/v1.2.0...v1.3.0) (2023-03-28)
 
 
