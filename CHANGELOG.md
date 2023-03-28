@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/eugeneVzaidun/cicd/compare/v1.9.0...v1.10.0) (2023-03-28)
+
+
+### Features
+
+* create branch on tag push ([3e1be2a](https://github.com/eugeneVzaidun/cicd/commit/3e1be2a71e496f6d6cadb77ee066c1ba784d071a))
+
 ## [1.9.0](https://github.com/eugeneVzaidun/cicd/compare/v1.8.0...v1.9.0) (2023-03-28)
 
 
