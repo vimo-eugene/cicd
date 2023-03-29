@@ -1,15 +1,11 @@
 name: Hotfix
 on:
-  # pull_request_review:
-  #   types: [submitted]
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - hotfix-base/*
+  pull_request_review:
+    types: [submitted]
 
 jobs:
   build-and-deploy:
-    if: startsWith(github.event.pull_request.head.ref, 'hotfix/')
+    if: github.event.review.state == 'approved' && startsWith(github.event.pull_request.head.ref, 'hotfix/')
     name: Build and Deploy
     runs-on: ubuntu-latest
     env:
@@ -20,5 +16,7 @@ jobs:
       id-token: "write"
       actions: "write"
     steps:
-      - name: Echo world
-        run: echo "Hello world"
+      - name: Checkout the shypple-next repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
