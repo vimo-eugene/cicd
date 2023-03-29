@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/eugeneVzaidun/cicd/compare/v1.13.0...v1.13.1) (2023-03-29)
+
+
+### Bug Fixes
+
+* update ([f54a959](https://github.com/eugeneVzaidun/cicd/commit/f54a95980ee090c2edd80a51b62487cbc4d8867f))
+
 ## [1.13.0](https://github.com/eugeneVzaidun/cicd/compare/v1.12.0...v1.13.0) (2023-03-29)
 
 
