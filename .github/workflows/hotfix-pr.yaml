@@ -45,7 +45,9 @@ jobs:
           git checkout ${CURRENT_BRANCH}
 
           # Check if a PR already exists, create if not
-          PR_EXISTS=$(gh pr list --base ${HOTFIX_BASE_BRANCH} --head ${CURRENT_BRANCH} --json state -q 'length(.[] | select(.state == "OPEN" or .state == "DRAFT"))' || echo "0")
+          PR_EXISTS=$(gh pr list --base ${HOTFIX_BASE_BRANCH} --head ${CURRENT_BRANCH} --json state --jq 'length' | tr -d '\n' || echo "0")
+
           if [ "${PR_EXISTS}" == "0" ]; then
-            gh pr create --base ${HOTFIX_BASE_BRANCH} --head ${CURRENT_BRANCH} --title "Hotfix PR: ${CURRENT_BRANCH}" --body "This is a hotfix PR. Please review and merge the changes."
+            gh pr create --base ${HOTFIX_BASE_BRANCH} --head ${CURRENT_BRANCH} --title "Hotfix PR: ${CURRENT_BRANCH}" --body "This is a hotfix PR. 
+            Please review and merge the changes."
           fi
