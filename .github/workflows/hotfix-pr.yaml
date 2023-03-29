@@ -12,7 +12,8 @@ permissions:
 jobs:
   create_hotfix_pr:
     runs-on: ubuntu-latest
-
+    env:
+      HOTFIX_BASE_PREFIX: hotfix-base
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -29,10 +30,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           CURRENT_BRANCH=$(git branch --show-current)
-          HOTFIX_BASE_BRANCH="hotfix-base-${CURRENT_BRANCH#hotfix/}"
+          HOTFIX_BASE_BRANCH="${HOTFIX_BASE_PREFIX}${CURRENT_BRANCH#hotfix}"
           LATEST_TAG=$(git describe --tags)
           LATEST_TAG=$(echo $LATEST_TAG | cut -d '-' -f 1)
-          # LATEST_TAG=$(git describe --tags --abbrev=0)
 
           # Check if hotfix base branch exists, create if not
           if ! git show-ref --verify --quiet refs/heads/${HOTFIX_BASE_BRANCH}; then

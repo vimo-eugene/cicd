@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.0](https://github.com/eugeneVzaidun/cicd/compare/v1.12.0...v1.13.0) (2023-03-29)
+
+
+### Features
+
+* improve pr flow ([0c6dc97](https://github.com/eugeneVzaidun/cicd/commit/0c6dc978caa95df03e211dfb87868d83e718b83f))
+
+
+### Bug Fixes
+
+* update ([8c070a8](https://github.com/eugeneVzaidun/cicd/commit/8c070a862d4e8e8791b8960eb092b695f4231d99))
+
 ## [1.12.0](https://github.com/eugeneVzaidun/cicd/compare/v1.11.0...v1.12.0) (2023-03-29)
 
 
