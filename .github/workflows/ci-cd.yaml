@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     name: Build
+    if: ${{ startsWith(github.event.pull_request.head.ref, 'hotfix/') == false }}
     runs-on: ubuntu-latest
     permissions:
       contents: "read"

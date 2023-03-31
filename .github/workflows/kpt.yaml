@@ -12,6 +12,7 @@ on:
 jobs:
   render-kpt:
     name: Render KPT
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
