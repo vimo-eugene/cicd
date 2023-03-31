@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.0](https://github.com/vimo-eugene/cicd/compare/v1.15.0...v1.16.0) (2023-03-31)
+
+
+### Features
+
+* update ([e3754e9](https://github.com/vimo-eugene/cicd/commit/e3754e9df8ec348c0bc7f3c4d8be0a4dc48f56ee))
+
 ## [1.15.0](https://github.com/vimo-eugene/cicd/compare/v1.14.0...v1.15.0) (2023-03-31)
 
 
