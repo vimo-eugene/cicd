@@ -1,4 +1,4 @@
-### How to Create and Merge a Hotfix in Git
+### How to Create and Merge a Hotfix
 
 This guide will walk you through the steps to create and merge a hotfix in Git. A hotfix is a quick patch to fix a critical issue in a release version of your code.
 
