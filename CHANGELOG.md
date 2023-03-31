@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.0](https://github.com/vimo-eugene/cicd/compare/v1.14.0...v1.15.0) (2023-03-31)
+
+
+### Features
+
+* align pipelines ([50c57c5](https://github.com/vimo-eugene/cicd/commit/50c57c571182e41b21a76e58ffd281bfee37d88c))
+
 ## [1.14.0](https://github.com/eugeneVzaidun/cicd/compare/v1.13.1...v1.14.0) (2023-03-31)
 
 
