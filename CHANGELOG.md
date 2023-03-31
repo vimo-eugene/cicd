@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/eugeneVzaidun/cicd/compare/v1.13.1...v1.14.0) (2023-03-31)
+
+
+### Features
+
+* align pipelines ([03eff03](https://github.com/eugeneVzaidun/cicd/commit/03eff038db7428647ae66c09df8f4ec6b20a5a1f))
+
 ## [1.13.1](https://github.com/eugeneVzaidun/cicd/compare/v1.13.0...v1.13.1) (2023-03-29)
 
 
